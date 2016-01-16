@@ -1,7 +1,7 @@
 package scanner;
 
-/**
- * Created by Haoyuan on 1/15/2016.
+/*
+ * A token from the lexer
  */
 public class Token {
     public static final Token ERROR_TOKEN = new Token(TokenKind.Error, "");
@@ -13,7 +13,21 @@ public class Token {
 
     @Override
     public String toString() {
-        return null;
+        switch(_kind) {
+            case LiteralAtom:
+                return "<Literal>" + _lexme;
+            case NumericAtom:
+                return "<Number>" + _lexme;
+            case LPar:
+                return "LPar";
+            case RPar:
+                return "RPar";
+            case EOF:
+                return "EOF";
+            case Error:
+                return "ERROR: Invalid Token " + _lexme;
+        }
+        return "<Wrong Token>" + _lexme;
     }
 
     public String getLexme() {
@@ -35,10 +49,11 @@ public class Token {
             return false;
         }
         if(_kind == ((Token)other)._kind) {
-            if(_kind == TokenKind.LiteralAtom || _kind == TokenKind.NumericAtom)
-                return _lexme.equals(((Token)other)._lexme);
-            else
+            if(_kind == TokenKind.LiteralAtom || _kind == TokenKind.NumericAtom) {
+                return _lexme.equals(((Token) other)._lexme);
+            } else {
                 return true;
+            }
         } else
             return false;
     }

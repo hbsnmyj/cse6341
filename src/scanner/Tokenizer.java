@@ -10,29 +10,32 @@ import java.util.regex.Pattern;
  */
 public class Tokenizer {
     public Token getNextToken(IScanner scanner) {
-        if (!scanner.isEOF()) {
-            char next = scanner.peek();
-            while(!scanner.isEOF() && isWhiteSpace(next)) {
-                try {
+        try {
+            if (!scanner.isEOF()) {
+                char next = scanner.peek();
+                while(!scanner.isEOF() && isWhiteSpace(next)) {
                     scanner.consume();
-                } catch (IOException e) {
-                    return new Token(Token.TokenKind.Error, "");
+                    if(scanner.isEOF()) return Token.EOF_TOKEN;
+                    next = scanner.peek();
                 }
+                if (next == '(') {
+                    scanner.consume();
+                    return new Token(Token.TokenKind.LPar, "");
+                } else if (next == ')') {
+                    scanner.consume();
+                    return new Token(Token.TokenKind.RPar, "");
+                } else
+                    return consumeAtom(scanner);
+            } else {
+                return new Token(Token.TokenKind.EOF, "");
             }
-
-            if (next == '(')
-                return new Token(Token.TokenKind.LPar, "");
-            else if (next == ')')
-                return new Token(Token.TokenKind.RPar, "");
-            else
-                return consumeAtom(scanner);
-        } else {
-            return new Token(Token.TokenKind.EOF, "");
+        } catch (IOException e) {
+            return new Token(Token.TokenKind.Error, "");
         }
     }
 
     private Token consumeAtom(IScanner scanner) {
-        String token = null;
+        String token;
         try {
             token = readToken(scanner);
         } catch (IOException e) {
@@ -48,7 +51,7 @@ public class Tokenizer {
 
     private Token readLiteralAtom(String token) {
         for(char s: token.toCharArray())
-            if(!Character.isUpperCase(s))
+            if(!Character.isUpperCase(s) && !Character.isDigit(s))
                 return new Token(Token.TokenKind.Error, token);
         return new Token(Token.TokenKind.LiteralAtom, token);
     }
@@ -62,7 +65,7 @@ public class Tokenizer {
 
     private String readToken(IScanner scanner) throws IOException {
         StringBuilder str = new StringBuilder("");
-        while(!scanner.isEOF() && !isWhiteSpace(scanner.peek())) {
+        while(!scanner.isEOF() && !isWhiteSpace(scanner.peek()) && scanner.peek() != '(' && scanner.peek() != ')') {
             str.append(scanner.consume());
         }
         return str.toString();
