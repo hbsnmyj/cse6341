@@ -1,3 +1,5 @@
+package scanner;
+
 import scanner.IScanner;
 import scanner.StdInputScanner;
 import scanner.Token;
@@ -37,7 +39,7 @@ public class Interpreter {
                         rpars.add(token);
                         break;
                     case Error:
-                        System.out.println(token);
+                        System.out.printf(token.toString() + "\n");
                         System.exit(-1);
                         break;
                 }
@@ -45,8 +47,16 @@ public class Interpreter {
             }
             String all_lexmes = String.join(", ", literals.stream().map(t -> t.getLexme()).collect(Collectors.toList()));
             long sum = numbers.stream().map(t -> t.getLexme()).map(Long::parseLong).reduce((x, y)->x+y).orElse(0L);
-            System.out.printf("LITERAL ATOMS: %d, %s\n", literals.size(), all_lexmes);
-            System.out.printf("NUMERIC ATOMS: %d, %d\n", numbers.size(), sum);
+            System.out.printf("LITERAL ATOMS: %d", literals.size());
+            if(literals.size() != 0)
+                System.out.printf(", %s\n", all_lexmes);
+            else
+                System.out.printf("\n");
+            System.out.printf("NUMERIC ATOMS: %d", numbers.size());
+            if(numbers.size() != 0)
+                System.out.printf(", %d\n", sum);
+            else
+                System.out.printf("\n");
             System.out.printf("OPEN PARENTHESES: %d\n", lpars.size());
             System.out.printf("CLOSING PARENTHESES: %d\n", rpars.size());
         } catch (IOException e) {

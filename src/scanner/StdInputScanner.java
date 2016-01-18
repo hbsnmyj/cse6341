@@ -9,15 +9,12 @@ import java.io.PushbackInputStream;
  */
 public class StdInputScanner implements IScanner {
     private static final int EOF_CHAR = -1;
-    private static StdInputScanner _instance = null;
     private int _next = -1;
 
     public static StdInputScanner getStdInputScanner() throws IOException {
-        if(_instance == null) {
-            _instance = new StdInputScanner();
-            _instance.consume();
-        }
-        return _instance;
+        StdInputScanner instance = new StdInputScanner();
+        instance.consume();
+        return instance;
     }
 
     @Override
