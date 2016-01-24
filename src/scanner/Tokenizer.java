@@ -1,9 +1,8 @@
 package scanner;
 
+import ast.Token;
+
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Scanner;
-import java.util.regex.Pattern;
 
 /**
  * Created by Haoyuan on 1/14/2016.

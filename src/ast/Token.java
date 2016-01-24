@@ -1,4 +1,4 @@
-package scanner;
+package ast;
 
 /*
  * A token from the lexer
@@ -6,6 +6,7 @@ package scanner;
 public class Token {
     public static final Token ERROR_TOKEN = new Token(TokenKind.Error, "");
     public static final Token EOF_TOKEN = new Token(TokenKind.EOF, "");
+    public static final Token NIL_TOKEN = new Token(TokenKind.LiteralAtom, "NIL");
 
     public enum TokenKind {
         LPar, RPar, LiteralAtom, NumericAtom, EOF, Error
@@ -19,13 +20,13 @@ public class Token {
             case NumericAtom:
                 return "<Number>" + _lexme;
             case LPar:
-                return "LPar";
+                return "'('";
             case RPar:
-                return "RPar";
+                return "')'";
             case EOF:
                 return "EOF";
             case Error:
-                return "ERROR: Invalid Token " + _lexme;
+                return "Invalid Token " + _lexme;
         }
         return "<Wrong Token>" + _lexme;
     }

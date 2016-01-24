@@ -1,9 +1,6 @@
 package scanner;
 
-import scanner.IScanner;
-import scanner.StdInputScanner;
-import scanner.Token;
-import scanner.Tokenizer;
+import ast.Token;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -39,14 +36,14 @@ public class Interpreter {
                         rpars.add(token);
                         break;
                     case Error:
-                        System.out.printf(token.toString() + "\n");
+                        System.out.printf("ERROR: " + token.toString() + "\n");
                         System.exit(-1);
                         break;
                 }
 
             }
-            String all_lexmes = String.join(", ", literals.stream().map(t -> t.getLexme()).collect(Collectors.toList()));
-            long sum = numbers.stream().map(t -> t.getLexme()).map(Long::parseLong).reduce((x, y)->x+y).orElse(0L);
+            String all_lexmes = String.join(", ", literals.stream().map(Token::getLexme).collect(Collectors.toList()));
+            long sum = numbers.stream().map(Token::getLexme).map(Long::parseLong).reduce((x, y)->x+y).orElse(0L);
             System.out.printf("LITERAL ATOMS: %d", literals.size());
             if(literals.size() != 0)
                 System.out.printf(", %s\n", all_lexmes);

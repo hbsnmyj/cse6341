@@ -12,10 +12,20 @@ public class TestUtils {
         FileInputStream is = new FileInputStream(new File(input));
         System.setIn(is);
     }
+    public static void RedirectStdinToString(String input) {
+        InputStream is = new ByteArrayInputStream(input.getBytes());
+        System.setIn(is);
+    }
 
     public static void RedirectStdout(String output) throws FileNotFoundException {
         PrintStream os = new PrintStream(new File(output));
         System.setOut(os);
+    }
+
+    public static ByteArrayOutputStream RedirectStdoutToString() {
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(os));
+        return os;
     }
 
     public static void resetAllStd() {
