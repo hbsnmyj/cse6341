@@ -59,6 +59,9 @@ public class Token {
             return false;
     }
 
+    public static Token Atom(String s) { return new Token(TokenKind.LiteralAtom, s);}
+    public static Token Atom(Integer d) { return new Token(TokenKind.LiteralAtom, d.toString());}
+
     private TokenKind _kind;
     private String _lexme;
 

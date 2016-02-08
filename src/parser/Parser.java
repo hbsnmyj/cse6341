@@ -3,6 +3,9 @@ package parser;
 import ast.Token;
 import ast.TreeNode;
 import scanner.ITokenizer;
+import scanner.StringScanner;
+import scanner.Tokenizer;
+import scanner.TokenizerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,5 +72,11 @@ public class Parser {
         _tokenizer.getCurrent();
         return result;
     }
-    
+
+    public static List<TreeNode> parseString(String input) throws ParsingException {
+        TokenizerAdapter tokenizer;
+        tokenizer = new TokenizerAdapter(new StringScanner(input), new Tokenizer());
+        Parser parser = new Parser(tokenizer);
+        return parser.getExpressions();
+    }
 }
