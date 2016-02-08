@@ -48,7 +48,7 @@ public class InterpreterTest {
     private void testCase(String input, String output) throws Exception {
         TestUtils.RedirectStdinToString(input);
         ByteArrayOutputStream os = TestUtils.RedirectStdoutToString();
-        Interpreter.Main(new String[]{});
+        Interpreter.main(new String[]{});
         assertEquals(os.toString(),output);
     }
 
