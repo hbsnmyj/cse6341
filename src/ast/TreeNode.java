@@ -1,5 +1,9 @@
 package ast;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Created by haoyu on 1/23/2016.
  */
@@ -68,7 +72,34 @@ public class TreeNode {
     }
 
     public String toListNotation() {
-        return null;
+        if(isAtom()) return _token.toPrintString();
+        else {
+            List<TreeNode> elements = retriveListElements();
+            String result = "(";
+            result += String.join(" ",
+                    elements.subList(0,elements.size() - 1).stream().map(TreeNode::toListNotation).collect(Collectors.toList()));
+            if(elements.get(elements.size() - 1).isNil())
+                result += " . ";
+            else
+                result += " ";
+            result += elements.get(elements.size() - 1).toListNotation();
+            return result;
+        }
+    }
+
+    private boolean isNil() {
+        return this._token.equals(Token.NIL_TOKEN);
+    }
+
+    private List<TreeNode> retriveListElements() {
+        TreeNode now = this;
+        List<TreeNode> result = new ArrayList<>();
+        while(!this.isAtom()) {
+            now = now._leftChild;
+            result.add(now);
+        }
+        result.add(now._rightChild);
+        return result;
     }
 
     public void setLeftChild(TreeNode leftChild) {

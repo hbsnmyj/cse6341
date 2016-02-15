@@ -8,6 +8,22 @@ public class Token {
     public static final Token EOF_TOKEN = new Token(TokenKind.EOF, "");
     public static final Token NIL_TOKEN = new Token(TokenKind.LiteralAtom, "NIL");
 
+    public String toPrintString() {
+        switch(_kind) {
+            case LiteralAtom:
+            case NumericAtom:
+                return _lexme;
+            case LPar:
+                return "'('";
+            case RPar:
+                return "')'";
+            case EOF:
+                return "EOF";
+            case Error:
+                return "Invalid Token " + _lexme;
+        }
+        return "<Wrong Token>" + _lexme;    }
+
     public enum TokenKind {
         LPar, RPar, LiteralAtom, NumericAtom, EOF, Error
     }
