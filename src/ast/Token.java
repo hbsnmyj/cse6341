@@ -7,6 +7,7 @@ public class Token {
     public static final Token ERROR_TOKEN = new Token(TokenKind.Error, "");
     public static final Token EOF_TOKEN = new Token(TokenKind.EOF, "");
     public static final Token NIL_TOKEN = new Token(TokenKind.LiteralAtom, "NIL");
+    public static final Token T_TOKEN = new Token(TokenKind.LiteralAtom, "T");
 
     public String toPrintString() {
         switch(_kind) {
@@ -23,6 +24,12 @@ public class Token {
                 return "Invalid Token " + _lexme;
         }
         return "<Wrong Token>" + _lexme;    }
+
+    public int toInteger() throws EvaluationException {
+        if(!_kind.equals(TokenKind.NumericAtom))
+            throw new EvaluationException(this.toString() + " is not a numeric atom.");
+        return Integer.parseInt(_lexme);
+    }
 
     public enum TokenKind {
         LPar, RPar, LiteralAtom, NumericAtom, EOF, Error
@@ -76,7 +83,7 @@ public class Token {
     }
 
     public static Token Atom(String s) { return new Token(TokenKind.LiteralAtom, s);}
-    public static Token Atom(Integer d) { return new Token(TokenKind.LiteralAtom, d.toString());}
+    public static Token Atom(Integer d) { return new Token(TokenKind.NumericAtom, d.toString());}
 
     private TokenKind _kind;
     private String _lexme;

@@ -49,7 +49,7 @@ public class InterpreterTest {
         TestUtils.RedirectStdinToString(input);
         ByteArrayOutputStream os = TestUtils.RedirectStdoutToString();
         Interpreter.main(new String[]{});
-        assertEquals(os.toString(),output);
+        assertEquals(os.toString().replaceAll("\r\n", "\n"),output);
     }
 
 }

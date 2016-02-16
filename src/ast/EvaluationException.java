@@ -5,7 +5,7 @@ package ast;
  */
 public class EvaluationException extends Exception {
     public EvaluationException(String val) {
-        super(val);
+        super("ERROR: " + val);
     }
 }
 

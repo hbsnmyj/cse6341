@@ -41,7 +41,7 @@ public class TestUtils {
     public static void compareFile(String standard, String input) throws IOException {
         String standardText = readFile(standard);
         String inputText = readFile(input);
-        assertEquals(inputText, standardText);
+        assertEquals(inputText.replaceAll("\r\n", "\n"), standardText.replaceAll("\r\n", "\n"));
     }
 
     private static String readFile(String standard) throws IOException {
