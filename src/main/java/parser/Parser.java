@@ -64,6 +64,7 @@ public class Parser {
             try {
                 tail.setLeftChild(Expr());
                 tail.setRightChild(Token.NIL_TOKEN);
+                tail.setAsTreeNode();
                 tail = tail.rightChild();
             } catch (ParsingException pe)  {
                 throw new ParsingException(ERROR_LIST_NOT_COMPLETE + _tokenizer.peekCurrent());

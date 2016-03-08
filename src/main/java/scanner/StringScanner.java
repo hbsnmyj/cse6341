@@ -2,9 +2,6 @@ package scanner;
 
 import java.io.IOException;
 
-/**
- * Created by Haoyuan on 1/15/2016.
- */
 public class StringScanner implements IScanner {
 
     public StringScanner(String str) {

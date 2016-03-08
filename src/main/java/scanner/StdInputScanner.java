@@ -4,9 +4,6 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.PushbackInputStream;
 
-/**
- * Created by Haoyuan on 1/15/2016.
- */
 public class StdInputScanner implements IScanner {
     private static final int EOF_CHAR = -1;
     private int _next = -1;
