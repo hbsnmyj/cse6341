@@ -16,6 +16,8 @@ public class EvalInterpreterTest {
         testCase("(PLUS 2 (PLUS 2 3))(PLUS 2 3)", "7\n5\n");
         testCase("(EQ (QUOTE Q) (QUOTE Q))", "T\n");
         testCase("3 2", "3\n2\n");
+        testCase("(NULL (QUOTE (NIL)))", "NIL\n");
+        testCase("(COND ((NULL 3) 4) ((QUOTE (1 2 3)) 7) ((NULL NIL) 8))", "7\n");
     }
 
     @Test

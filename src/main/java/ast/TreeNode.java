@@ -99,7 +99,7 @@ public class TreeNode {
     }
 
     public boolean isNil() {
-        return this._token.equals(Token.NIL_TOKEN);
+        return this.isAtom() && this._token.equals(Token.NIL_TOKEN);
     }
 
     public List<TreeNode> retrieveListElements() {
@@ -173,5 +173,9 @@ public class TreeNode {
             return new TreeNode(Token.T_TOKEN);
         else
             return new TreeNode(Token.NIL_TOKEN);
+    }
+
+    public void setAsTreeNode() {
+        this._token = null;
     }
 }
