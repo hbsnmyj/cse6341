@@ -21,6 +21,33 @@ public class EvalInterpreterTest {
     }
 
     @Test
+    public void testDefunSimple() throws Exception {
+        testCase("(DEFUN GETI(X) 5)(GETI)", "GETI\n5\n");
+        testCase("(DEFUN GETI(X) 5)", "GETI\n5\n");
+    }
+
+    @Test
+    public void testDefunConflictName() throws Exception {
+        testCaseStartsWith("(DEFUN PLUS (X) 5)", "ERROR: ");
+    }
+
+    @Test
+    public void testDefunPlus() throws Exception {
+        testCase("(DEFUN PLUS5(X) (+ X 5))\n(PLUS5 5)", "PLUS5\n10\n");
+        testCase("(DEFUN PLUSN(X Y) (+ X Y))\n(PLUSN 5 5)", "PLUSN\n10\n");
+    }
+
+    @Test
+    public void testDefunList() throws Exception {
+        testCase("(DEFUN PREPEND(X AS) (CONS AS X))\n(PREPEND (QUOTE (2 3)) 5)", "PREPEND\n(5 3 2)\n");
+    }
+
+    public void testDefunListAppend() throws Exception {
+        String appendDef = "(DEFUN APPEND (X AS) (COND ((EQ AS NIL) (CONS X NIL)) (T (CONS (CAR AS) (APPEND X (CDR AS))))))";
+        testCase(appendDef + "\n(APPEND (QUOTE (2 3)) 5)", "APPEND\n(5 3 2)\n");
+    }
+
+    @Test
     public void testError() throws Exception {
         testCaseStartsWith("(COND (NIL 1) (T 3 2))", "ERROR: ");
         testCaseStartsWith("(2)", "ERROR: ");
