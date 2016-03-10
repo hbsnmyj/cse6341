@@ -7,9 +7,11 @@ import java.util.Map;
 
 public class Evaluator {
     private Map<String, BuiltInOp> builtins;
+    private Map<String, TreeNode> dlist;
 
     public Evaluator() {
         builtins = new HashMap<>();
+        dlist = new HashMap<>();
         for(Method m: BuiltInOps.class.getMethods()) {
             BuiltIn annotation = (BuiltIn) m.getAnnotation(BuiltIn.class);
             if(annotation != null) {
@@ -22,6 +24,10 @@ public class Evaluator {
     }
 
     public TreeNode eval(TreeNode exp) throws EvaluationException {
+        return eval(exp, new HashMap<>());
+    }
+
+    public TreeNode eval(TreeNode exp, Map<String, TreeNode> alist) throws EvaluationException {
         if(exp == null) throw new EvaluationException("Cannot evaluate null node.");
         if(exp.isAtom()) {
             if(exp.isNil() || exp.isTrue() || exp.isNumeric()) return exp;
@@ -33,18 +39,31 @@ public class Evaluator {
             throw new EvaluationException("eval() is undefined for list " + exp.toListNotation() + ".");
 
         //searching for the built-in
-        String builtinName = exp.leftChild().getAtom().getLexme();
+        String carName = exp.leftChild().getAtom().getLexme();
+        if(carName.equals("DEFUN")) {
+            return defun(exp.rightChild());
+        } else {
+            BuiltInOp op = getBuiltInOp(carName);
+
+            //check for parameter length
+            if (op._expectedParams > 0 && exp.getListLength() != op._expectedParams) {
+                throw new EvaluationException("Expected " + op._expectedParams + " params, found " + exp.getListLength());
+            }
+
+            //invoke the builtin
+            return op.invoke(this, exp, alist);
+        }
+    }
+
+    private TreeNode defun(TreeNode exp) throws EvaluationException {
+        throw new EvaluationException("Not Implemented");
+    }
+
+    private BuiltInOp getBuiltInOp(String builtinName) throws EvaluationException {
         BuiltInOp op = builtins.get(builtinName);
         if(op == null)
             throw new EvaluationException("Cannot find built in " + builtinName);
-
-        //check for parameter length
-        if(op._expectedParams > 0 && exp.getListLength() != op._expectedParams) {
-            throw new EvaluationException("Expected " + op._expectedParams + " params, found " + exp.getListLength());
-        }
-
-        //invoke the builtin
-        return op.invoke(this, exp);
+        return op;
     }
 
     private class BuiltInOp {
@@ -55,10 +74,10 @@ public class Evaluator {
             _expectedParams = expectedParams;
         }
 
-        public TreeNode invoke(Evaluator evaluator, TreeNode exp) throws EvaluationException {
+        public TreeNode invoke(Evaluator evaluator, TreeNode exp, Map<String, TreeNode> alist) throws EvaluationException {
             String builtinName = exp.leftChild().getAtom().getLexme();
             try {
-                return (TreeNode)_method.invoke(null, evaluator, builtinName, exp.rightChild());
+                return (TreeNode)_method.invoke(null, evaluator, builtinName, exp.rightChild(), alist);
             } catch (IllegalAccessException e) {
                 throw new EvaluationException("error while invoking built-in method");
             } catch (InvocationTargetException e) {
