@@ -22,8 +22,8 @@ public class EvalInterpreterTest {
 
     @Test
     public void testDefunSimple() throws Exception {
-        testCase("(DEFUN GETI(X) 5)(GETI)", "GETI\n5\n");
-        testCase("(DEFUN GETI(X) 5)", "GETI\n5\n");
+        testCase("(DEFUN GETI () 5)(GETI)", "GETI\n5\n");
+        testCase("(DEFUN GETI () 5)", "GETI\n");
     }
 
     @Test
@@ -33,18 +33,48 @@ public class EvalInterpreterTest {
 
     @Test
     public void testDefunPlus() throws Exception {
-        testCase("(DEFUN PLUS5(X) (+ X 5))\n(PLUS5 5)", "PLUS5\n10\n");
-        testCase("(DEFUN PLUSN(X Y) (+ X Y))\n(PLUSN 5 5)", "PLUSN\n10\n");
+        testCase("(DEFUN PLUS5(X) (PLUS X 5))\n(PLUS5 5)", "PLUS5\n10\n");
+        testCase("(DEFUN PLUSN(X Y) (PLUS X Y))\n(PLUSN 5 5)", "PLUSN\n10\n");
     }
 
     @Test
     public void testDefunList() throws Exception {
-        testCase("(DEFUN PREPEND(X AS) (CONS AS X))\n(PREPEND (QUOTE (2 3)) 5)", "PREPEND\n(5 3 2)\n");
+        testCase("(DEFUN PREPEND(X AS) (CONS AS X))\n(PREPEND (QUOTE (2 3)) 5)", "PREPEND\n(5 2 3)\n");
+        testCase("(DEFUN PREPEND(X AS) (CONS AS X))\n(PREPEND (QUOTE (2 3 4)) 5)", "PREPEND\n(5 2 3 4)\n");
+        testCase("(DEFUN PREPEND(X AS) (CONS AS X))\n(PREPEND (QUOTE (2 3 (4))) 5)", "PREPEND\n(5 2 3 (4))\n");
     }
 
+    @Test
     public void testDefunListAppend() throws Exception {
-        String appendDef = "(DEFUN APPEND (X AS) (COND ((EQ AS NIL) (CONS X NIL)) (T (CONS (CAR AS) (APPEND X (CDR AS))))))";
-        testCase(appendDef + "\n(APPEND (QUOTE (2 3)) 5)", "APPEND\n(5 3 2)\n");
+        String appendDef = "(DEFUN APPEND (X AS) (COND ((NULL AS) (CONS X NIL)) (T (CONS (CAR AS) (APPEND X (CDR AS))))))";
+        testCase(appendDef + "\n(APPEND 5 (QUOTE (2 3)))", "APPEND\n(2 3 5)\n");
+    }
+
+    @Test
+    public void testSum() throws Exception {
+        String sumDef = "(DEFUN SUM (AS) (COND ((NULL AS) 0) (T (PLUS (CAR AS) (SUM (CDR AS))))))";
+        testCase(sumDef + "\n(SUM (QUOTE (2 3 5)))", "SUM\n10\n");
+        testCase(sumDef + "\n(SUM (QUOTE (2 3 5 7)))", "SUM\n17\n");
+    }
+
+    @Test
+    public void testDefunNotCorrectLength() throws Exception {
+        testCaseStartsWith("(DEFUN X Y Z)", "ERROR: ");
+    }
+
+    @Test
+    public void testDefunFIsDefined() throws Exception {
+        testCaseStartsWith("(DEFUN PLUS (X) X)", "ERROR: ");
+    }
+
+    @Test
+    public void testDefunS1NotList() throws Exception {
+        testCaseStartsWith("(DEFUN PLUS X X)", "ERROR: ");
+    }
+
+    @Test
+    public void testDefunS1NotLiteralList() throws Exception {
+        testCaseStartsWith("(DEFUN PLUS (X 3) X)", "ERROR: ");
     }
 
     @Test
@@ -62,7 +92,7 @@ public class EvalInterpreterTest {
 
     private void testCase(String input, String output) throws Exception {
         TestUtils.RedirectStdinToString(input);
-        ByteArrayOutputStream os = TestUtils.RedirectStdoutToString();
+         ByteArrayOutputStream os = TestUtils.RedirectStdoutToString();
         EvalInterpreter.main(new String[]{});
         assertEquals(os.toString().replaceAll("\r\n", "\n"),output);
     }
