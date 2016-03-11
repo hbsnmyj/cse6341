@@ -49,9 +49,8 @@ T
 (NULL NIL)
 (NULL 3)
 (NULL (EQ 3 2))
-(NULL (QUOTE 3 2)
-(ATOM (QUOTE 3 2)
-(INT (QUOTE 3 2)
+(NULL (QUOTE (3 2)))
+(ATOM (QUOTE (3 2)))
 (QUOTE (PLUS1 2 3))
 
 (COND (3 2) (4 3))
@@ -100,13 +99,13 @@ NIL
 (MEM 3 (QUOTE (2 3 4)))
 
 (DEFUN UNI (S1 S2)
-    (COND ( (NULL S1)S2)
-            (NULL S2)S1)
+    (COND ((NULL S1)S2)
+          ((NULL S2)S1)
     ( T (COND
-        (MEM (CAR S1) S2)
+        ((MEM (CAR S1) S2)
             (UNI (CDR S1) S2))
         ( T (CONS
             (CAR S1) (UNI (CDR S1) S2)))))
-    ))
+))
 
-(UNI (QUOTE (2 3 4)) (QUOTE 3 4 5))
+(UNI (QUOTE (2 3 4)) (QUOTE (3 4 5)))
