@@ -14,7 +14,7 @@ The main interpreter for each project is located at:
   
   __Project 2__: parser.Interpreter
   
-  __Project 3__: ast.EvalInterpreter
+  __Project 3/4__: ast.EvalInterpreter
 
 
 See http://web.cse.ohio-state.edu/~rountev/6341/projects.html for further details.
