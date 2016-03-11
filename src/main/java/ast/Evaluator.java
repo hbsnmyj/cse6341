@@ -74,8 +74,8 @@ public class Evaluator {
             List<TreeNode> formalList = funcDefinition.leftChild().retrieveListElements();
             TreeNode s2 = funcDefinition.rightChild();
             /* check for parameter numbers */
-            if(formalList.size() != treeNode.getListLength()) throw new EvaluationException("The number of formal arguments does not match formal arguments");
-            Map<String, TreeNode> newAlist = new HashMap<>();
+            if(formalList.size() != treeNode.getListLength()) throw new EvaluationException("The number of formal arguments does not match formal arguments while calling " + carName);
+            Map<String, TreeNode> newAlist = new HashMap<>(alist);
             List<TreeNode> actualList = treeNode.retrieveListElements();
             /* bind the arguments */
             for(int i=0;i<actualList.size();++i) {
