@@ -43,8 +43,8 @@ public class EvalInterpreterTest {
     }
 
     public void testDefunListAppend() throws Exception {
-//        String appendDef = "(APPEND )"
-//        testCase(appendDef + "\n(APPEND (QUOTE (2 3)) 5)", "PREPEND\n(5 3 2)\n");
+        String appendDef = "(DEFUN APPEND (X AS) (COND ((EQ AS NIL) (CONS X NIL)) (T (CONS (CAR AS) (APPEND X (CDR AS))))))";
+        testCase(appendDef + "\n(APPEND (QUOTE (2 3)) 5)", "APPEND\n(5 3 2)\n");
     }
 
     @Test
