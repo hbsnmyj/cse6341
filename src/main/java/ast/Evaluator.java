@@ -1,11 +1,7 @@
 package ast;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-import sun.reflect.generics.tree.Tree;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,8 +70,8 @@ public class Evaluator {
             List<TreeNode> formalList = funcDefinition.leftChild().retrieveListElements();
             TreeNode s2 = funcDefinition.rightChild();
             /* check for parameter numbers */
-            if(formalList.size() != treeNode.getListLength()) throw new EvaluationException("The number of formal arguments does not match formal arguments");
-            Map<String, TreeNode> newAlist = new HashMap<>();
+            if(formalList.size() != treeNode.getListLength()) throw new EvaluationException("The number of formal arguments does not match formal arguments while calling " + carName);
+            Map<String, TreeNode> newAlist = new HashMap<>(alist);
             List<TreeNode> actualList = treeNode.retrieveListElements();
             /* bind the arguments */
             for(int i=0;i<actualList.size();++i) {

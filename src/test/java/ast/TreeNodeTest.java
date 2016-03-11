@@ -188,6 +188,9 @@ public class TreeNodeTest {
         testEvalCase("(NULL NIL)", "T");
         testEvalCase("(NULL 3)", "NIL");
         testEvalCase("(NULL (EQ 3 2))", "T");
+        testEvalCase("(NULL (QUOTE (3 2)))", "NIL");
+        testEvalCase("(INT (QUOTE (3 2)))", "NIL");
+        testEvalCase("(ATOM (QUOTE (3 2)))", "NIL");
     }
 
     @Test

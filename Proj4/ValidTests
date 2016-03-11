@@ -1,0 +1,111 @@
+NIL
+T
+3
+
+(CAR (QUOTE (2)))
+(CAR (QUOTE ((1 2))))
+(CAR (QUOTE (2 3)))
+(CAR (QUOTE ((2 3) (3 4 5) NIL)))
+(CAR (QUOTE (2 (2 3) (3 4))))
+(CAR (QUOTE ((2 3))))
+
+(CDR (QUOTE (2)))
+(CDR (QUOTE (2 3)))
+(CDR (QUOTE (2 (2 3))))
+(CDR (QUOTE (2 (2 3) (3 4))))
+(CDR (QUOTE ((2 3))))
+
+(CONS 3 2)
+(CONS  3 (CONS 2 NIL))
+(CONS 3 (QUOTE (3 2)))
+(CONS 2 (CONS 3 (CONS 4 5)))
+
+
+(PLUS 3 2)
+(MINUS 3 2)
+(TIMES 5 3)
+(LESS 5 3)
+(LESS 3 5)
+(GREATER 5 3)
+(GREATER 3 5)
+(PLUS 3 (PLUS 1 1))
+
+
+(EQ 2 3)
+(EQ 3 3)
+(EQ () NIL)
+(EQ () ())
+
+(ATOM 2)
+(ATOM T)
+(ATOM NIL)
+(ATOM ())
+(ATOM (PLUS 2 3))
+(ATOM (QUOTE (NIL T)))
+(INT 2)
+(INT T)
+(INT (PLUS 2 3))
+(INT (QUOTE (PLUS 2 3)))
+(NULL NIL)
+(NULL 3)
+(NULL (EQ 3 2))
+(NULL (QUOTE (3 2)))
+(ATOM (QUOTE (3 2)))
+(QUOTE (PLUS1 2 3))
+
+(COND (3 2) (4 3))
+(COND (NIL 2) (4 3))
+(COND ((EQ 2 3) 2) (4 3))
+(COND ((EQ 2 2) 2) (4 3))
+
+(CONS (CAR (QUOTE (5 6) ))  (CAR (CDR (QUOTE (5 6)))))
+(CONS (QUOTE (1 2) ) (QUOTE (3 4) ) )
+(QUOTE (3))
+(INT (QUOTE (3)))
+(EQ (INT (QUOTE (3))) NIL)
+(COND (T NIL))
+(COND ((PLUS 0 1) NIL))
+
+NIL
+(QUOTE Q)
+(QUOTE ((Q)))
+(PLUS 2 (PLUS 2 3))(PLUS 2 3)
+(EQ (QUOTE Q) (QUOTE Q))
+3 2
+(NULL (QUOTE (NIL)))
+(COND ((NULL 3) 4) ((QUOTE (1 2 3)) 7) ((NULL NIL) 8))
+
+(DEFUN GETI () 5)(GETI)
+
+(DEFUN PLUS5(X) (PLUS X 5))(PLUS5 5)
+(DEFUN PLUSN(X Y) (PLUS X Y))(PLUSN 5 5)
+
+(DEFUN PREPEND(X AS) (CONS AS X))
+(PREPEND (QUOTE (2 3)) 5)
+(PREPEND (QUOTE (2 3 4)) 5)
+(PREPEND (QUOTE (2 3 (4))) 5)
+(DEFUN APPEND (X AS) (COND ((NULL AS) (CONS X NIL)) (T (CONS (CAR AS) (APPEND X (CDR AS))))))
+(APPEND 5 (QUOTE (2 3)))
+
+(DEFUN SUM (AS) (COND ((NULL AS) 0) (T (PLUS (CAR AS) (SUM (CDR AS))))))
+(SUM (QUOTE (2 3 5)))
+(SUM (QUOTE (2 3 5 7)))
+
+(DEFUN QUOTEVAR(X) (QUOTE (X 2 3)))(QUOTEVAR 1)
+
+(DEFUN DIFF (X Y) (COND ( (EQ X Y) NIL ) (T T) ) )
+(DIFF 5 6)
+(DEFUN MEM (X LIST) (COND ( (NULL LIST) NIL ) ( T (COND ( (EQ X (CAR LIST))T ) ( T (MEM X (CDR LIST)))))))
+(MEM 3 (QUOTE (2 3 4)))
+
+(DEFUN UNI (S1 S2)
+    (COND ((NULL S1)S2)
+          ((NULL S2)S1)
+    ( T (COND
+        ((MEM (CAR S1) S2)
+            (UNI (CDR S1) S2))
+        ( T (CONS
+            (CAR S1) (UNI (CDR S1) S2)))))
+))
+
+(UNI (QUOTE (2 3 4)) (QUOTE (3 4 5)))

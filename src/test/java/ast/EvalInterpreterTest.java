@@ -63,6 +63,14 @@ public class EvalInterpreterTest {
     }
 
     @Test
+    public void testDefunQuoteUsage() throws Exception {
+        testCase("(DEFUN QUOTEVAR (X)\n" +
+                "  (QUOTE (X 2 3))\n" +
+                ")\n" +
+                "(QUOTEVAR 1)", "QUOTEVAR\n(X 2 3)\n");
+    }
+
+    @Test
     public void testDefunFIsDefined() throws Exception {
         testCaseStartsWith("(DEFUN PLUS (X) X)", "ERROR: ");
     }
@@ -71,6 +79,48 @@ public class EvalInterpreterTest {
     public void testDefunS1NotList() throws Exception {
         testCaseStartsWith("(DEFUN PLUS X X)", "ERROR: ");
     }
+
+    @Test
+    public void testDefunS1FunctionNameBinding() throws Exception {
+        testCaseStartsWith("(DEFUN F (X) (X NIL))\n(F NULL)", "F\nERROR:");
+    }
+
+    @Test
+    public void testMultipleDefinition() throws Exception {
+        testCase("(DEFUN DIFF (X Y) (COND ( (EQ X Y) NIL ) (T T) ) )  \n" +
+                "\n" +
+                "(DIFF 5 6)\n" +
+                "\n" +
+                "(DEFUN MEM (X LIST) (COND ( (NULL LIST) NIL ) ( T (COND ( (EQ X (CAR LIST))T ) ( T (MEM X (CDR LIST)))))))\n" +
+                "\n" +
+                "(MEM 3 (QUOTE (2 3 4)))\n", "DIFF\nT\nMEM\nT\n");
+        testCase("(DEFUN DIFF (X Y) (COND ( (EQ X Y) NIL ) (T T) ) )  \n" +
+                "\n" +
+                "(DIFF 5 6)\n" +
+                "\n" +
+                "(DEFUN MEM (X LIST) (COND ( (NULL LIST) NIL ) ( T (COND ( (EQ X (CAR LIST))T ) ( T (MEM X (CDR LIST)))))))\n" +
+                "\n" +
+                "(MEM 3 (QUOTE (2 3 4)))\n" + "(DEFUN UNI (S1 S2)\n" +
+                "(COND ( (NULL S1)S2)\n" +
+                "( (NULL S2)S1)\n" +
+                "( T (COND\n" +
+                "( (MEM (CAR S1) S2)\n" +
+                "(UNI (CDR S1) S2))\n" +
+                "( T (CONS\n" +
+                "(CAR S1) (UNI (CDR S1) S2)))))\n" +
+                "))" + "(UNI (QUOTE (2 3 4)) (QUOTE (3 4 5)))", "DIFF\nT\nMEM\nT\nUNI\n(2 3 4 5)\n");
+    }
+
+    @Test
+    public void testDynamicScoping() throws Exception {
+        testCase("(DEFUN F(X) (PLUS X Y))(DEFUN G1(Y) (F 10))(DEFUN G2(Y) (F 20))(G1 5)(G2 5)(G1 (G2 5))", "F\nG1\nG2\n15\n25\n35\n");
+    }
+
+    @Test
+    public void testFormalList() throws Exception {
+        testCase("(DEFUN X1(X) (PLUS 1 X))(DEFUN X2(X) (PLUS X 2))(X2 (X1 0))", "X1\nX2\n3\n");
+    }
+
 
     @Test
     public void testDefunS1NotLiteralList() throws Exception {
