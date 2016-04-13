@@ -1,0 +1,28 @@
+T
+F
+NIL
+3
+()
+(PLUS 3  3)
+(NULL ())
+(INT 3)
+(INT (CONS 2 NIL))
+(COND (T 5) (F 6))
+(COND (F 5) (F 6))
+(CONS 3 NIL)
+(COND (F 3) (T 4))
+(COND (T F) (F T))
+(COND (T (CONS 3 NIL)) (T NIL))
+(COND (F (CONS 3 NIL)) (F NIL))
+(LESS 3 5)
+(LESS (CAR (CONS 3 NIL)) 6)
+(ATOM 3)
+(ATOM NIL)
+(ATOM T)
+(ATOM (CONS 3 NIL))
+(INT 3)
+(INT NIL)
+(INT T)
+(INT (CONS 3 NIL))
+(PLUS (CAR (CONS 5 NIL)) (CAR (CONS 5 NIL)))
+(COND (F NIL) (T (CONS 1 NIL)))
