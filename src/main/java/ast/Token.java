@@ -8,6 +8,7 @@ public class Token {
     public static final Token EOF_TOKEN = new Token(TokenKind.EOF, "");
     public static final Token NIL_TOKEN = new Token(TokenKind.LiteralAtom, "NIL");
     public static final Token T_TOKEN = new Token(TokenKind.LiteralAtom, "T");
+    public static final Token F_TOKEN = new Token(TokenKind.LiteralAtom, "F");
 
     public String toPrintString() {
         switch(_kind) {

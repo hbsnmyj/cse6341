@@ -7,4 +7,5 @@ import java.lang.annotation.RetentionPolicy;
 public @interface BuiltIn {
     String[] operatorName();
     int expectedLength();
+    String type();
 }

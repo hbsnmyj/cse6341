@@ -32,7 +32,6 @@ public class TreeNodeTest {
         assertEquals(evaluator.eval(results.get(0)).toListNotation(), output);
     }
 
-
     @Test
     public void testAtomEval() throws Exception {
         testEvalCase(TokenNode(Atom("NIL")), "NIL");
@@ -92,12 +91,12 @@ public class TreeNodeTest {
         testEvalCase("(MINUS 3 2)", "1");
         testEvalCase(Cons(Atom("TIMES"), Cons(Atom(3), Cons(Atom(2), NIL_TOKEN))), "6");
         testEvalCase("(TIMES 5 3)", "15");
-        testEvalCase(Cons(Atom("LESS"), Cons(Atom(3), Cons(Atom(2), NIL_TOKEN))), "NIL");
-        testEvalCase("(LESS 5 3)", "NIL");
+        testEvalCase(Cons(Atom("LESS"), Cons(Atom(3), Cons(Atom(2), NIL_TOKEN))), "F");
+        testEvalCase("(LESS 5 3)", "F");
         testEvalCase("(LESS 3 5)", "T");
         testEvalCase(Cons(Atom("GREATER"), Cons(Atom(3), Cons(Atom(2), NIL_TOKEN))), "T");
         testEvalCase("(GREATER 5 3)", "T");
-        testEvalCase("(GREATER 3 5)", "NIL");
+        testEvalCase("(GREATER 3 5)", "F");
         testEvalCase(Cons(Atom("PLUS"), Cons(Cons(Atom("PLUS"), Cons(Atom(1), Cons(Atom(1), NIL_TOKEN))), Cons(Atom(2), NIL_TOKEN))), "4");
         testEvalCase("(PLUS 3 (PLUS 1 1))", "5");
     }
@@ -154,8 +153,8 @@ public class TreeNodeTest {
 
     @Test
     public void testEq() throws Exception {
-        testEvalCase(Cons(Atom("EQ"), Cons(Atom(2), Cons(Atom(3), NIL_TOKEN))), "NIL");
-        testEvalCase("(EQ 2 3)", "NIL");
+        testEvalCase(Cons(Atom("EQ"), Cons(Atom(2), Cons(Atom(3), NIL_TOKEN))), "F");
+        testEvalCase("(EQ 2 3)", "F");
         testEvalCase("(EQ 3 3)", "T");
         testEvalCase(Cons(Atom("EQ"), Cons(Atom(2), Cons(Atom(2), NIL_TOKEN))), "T");
 
@@ -180,14 +179,14 @@ public class TreeNodeTest {
         testEvalCase("(ATOM NIL)", "T");
         testEvalCase("(ATOM ())", "T");
         testEvalCase("(ATOM (PLUS 2 3))", "T");
-        testEvalCase("(ATOM (QUOTE (NIL T)))", "NIL");
+        testEvalCase("(ATOM (QUOTE (NIL T)))", "F");
         testEvalCase("(INT 2)", "T");
-        testEvalCase("(INT T)", "NIL");
+        testEvalCase("(INT T)", "F");
         testEvalCase("(INT (PLUS 2 3))", "T");
-        testEvalCase("(INT (QUOTE (PLUS 2 3)))", "NIL");
+        testEvalCase("(INT (QUOTE (PLUS 2 3)))", "F");
         testEvalCase("(NULL NIL)", "T");
-        testEvalCase("(NULL 3)", "NIL");
-        testEvalCase("(NULL (EQ 3 2))", "T");
+        testEvalCase("(NULL 3)", "F");
+        testEvalCase("(NULL (EQ 3 2))", "F");
     }
 
     @Test
@@ -202,10 +201,9 @@ public class TreeNodeTest {
 
     @Test
     public void testCond() throws Exception {
-        testEvalCase("(COND (3 2) (4 3))", "2");
-        testEvalCase("(COND (NIL 2) (4 3))", "3");
-        testEvalCase("(COND ((EQ 2 3) 2) (4 3))", "3");
-        testEvalCase("(COND ((EQ 2 2) 2) (4 3))", "2");
+        testEvalCase("(COND (F 2) ((INT 4) 3))", "3");
+        testEvalCase("(COND ((EQ 2 3) 2) ((INT 4) 3))", "3");
+        testEvalCase("(COND ((EQ 2 2) 2) ((INT 4) 3))", "2");
     }
 
     @Test(expectedExceptions = EvaluationException.class)
@@ -238,9 +236,9 @@ public class TreeNodeTest {
         testEvalCase("(CONS (CAR (QUOTE (5 6) ))  (CAR (CDR (QUOTE (5 6)))))", "(5 . 6)");
         testEvalCase("(CONS (QUOTE (1 2) ) (QUOTE (3 4) ) )", "((1 2) 3 4)");
         testEvalCase("(QUOTE (3))", "(3)");
-        testEvalCase("(INT (QUOTE (3)))", "NIL");
-        testEvalCase("(EQ (INT (QUOTE (3))) NIL)", "T");
+        testEvalCase("(INT (QUOTE (3)))", "F");
+        testEvalCase("(EQ (INT (QUOTE (3))) F)", "T");
         testEvalCase("(COND (T NIL))","NIL");
-        testEvalCase("(COND ((PLUS 0 1) NIL))", "NIL");
+        testEvalCase("(COND ((EQ 0 0) NIL))", "NIL");
     }
 }

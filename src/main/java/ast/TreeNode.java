@@ -143,6 +143,10 @@ public class TreeNode {
         return this.isAtom() && _token.equals(Token.T_TOKEN);
     }
 
+    public boolean isFalse() {
+        return this.isAtom() && _token.equals(Token.F_TOKEN);
+    }
+
     public boolean isList() {
         TreeNode now = this;
         while(!now.isAtom()) now = now._rightChild;
@@ -172,10 +176,11 @@ public class TreeNode {
         if(b)
             return new TreeNode(Token.T_TOKEN);
         else
-            return new TreeNode(Token.NIL_TOKEN);
+            return new TreeNode(Token.F_TOKEN);
     }
 
     public void setAsTreeNode() {
         this._token = null;
     }
+
 }
