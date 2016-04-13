@@ -42,7 +42,14 @@ public class BuiltInOps {
         Type op1 = evaluator.getType(params.get(0));
         Type op2 = evaluator.getType(params.get(1));
         if (!op1.isNat() || !op2.isNat()) throw new TypeCheckException (op + ": Expecting numeric atoms");
-        return new NatType();
+        switch(op) {
+            case "EQ":case "LESS":
+                return new BoolType();
+            case "PLUS":
+                return new NatType();
+            default:
+                throw new TypeCheckException("op " + op + " is not supported");
+        }
     }
 
     @BuiltIn(operatorName = {"PLUS", "LESS", "EQ"}, expectedLength = 3, type = "BOUND")
@@ -213,8 +220,9 @@ public class BuiltInOps {
         Type typeT = evaluator.getType(params.get(0).rightChild().leftChild());
         for(TreeNode s : params) {
             Type condType = evaluator.getType(s.leftChild());
-            if(!condType.isBool())
+            if(!condType.isBool()) {
                 throw new TypeCheckException("COND's condition is not bool");
+            }
             Type resultType = evaluator.getType(s.rightChild().leftChild());
             if(!typeT.equals(resultType))
                 throw new TypeCheckException("COND's result should be the same type");

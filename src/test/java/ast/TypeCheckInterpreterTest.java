@@ -38,6 +38,7 @@ public class TypeCheckInterpreterTest {
         testCorrect("(INT (CONS 3 NIL))");
         testCorrect("(PLUS (CAR (CONS 5 NIL)) (CAR (CONS 5 NIL)))");
         testCorrect("(COND (F NIL) (T (CONS 1 NIL)))");
+        testCorrect("(COND ((NULL NIL) 3) ((ATOM NIL) 4) ((EQ 2 3) 5) ((INT NIL) 6) ((LESS 3 5) 7))");
     }
 
     @Test
